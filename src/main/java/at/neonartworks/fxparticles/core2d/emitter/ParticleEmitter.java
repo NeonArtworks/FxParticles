@@ -1,7 +1,7 @@
 package at.neonartworks.fxparticles.core2d.emitter;
 
-import at.neonartworks.fxparticles.IParticleSystem;
 import at.neonartworks.fxparticles.base.BaseParticleEmitter;
+import at.neonartworks.fxparticles.base.IBaseParticleSystem;
 import at.neonartworks.fxparticles.core2d.system.ParticleSystem2D;
 import at.neonartworks.fxparticles.core2d.system.particle.LifeTime;
 import at.neonartworks.fxparticles.core2d.system.particle.Particle2D;
@@ -15,7 +15,7 @@ public class ParticleEmitter extends BaseParticleEmitter
 	}
 
 	@Override
-	public void emit(IParticleSystem particleSystem)
+	public void emit(IBaseParticleSystem particleSystem)
 	{
 
 		for (int i = 0; i < getAmountToEmit(); i++)

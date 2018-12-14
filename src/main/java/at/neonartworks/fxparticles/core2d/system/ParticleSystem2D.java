@@ -4,10 +4,11 @@ import java.util.Iterator;
 import java.util.List;
 
 import at.neonartworks.fxparticles.FXParticlesView;
-import at.neonartworks.fxparticles.IParticleSystem;
 import at.neonartworks.fxparticles.base.BaseParticle2D;
 import at.neonartworks.fxparticles.base.BaseParticleEmitter;
 import at.neonartworks.fxparticles.base.BaseParticleModifier;
+import at.neonartworks.fxparticles.base.IBaseParticle;
+import at.neonartworks.fxparticles.base.IBaseParticleSystem;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.LongProperty;
 import javafx.beans.property.ObjectProperty;
@@ -30,16 +31,16 @@ import javafx.stage.Stage;
  *
  */
 
-public class ParticleSystem2D extends Canvas implements IParticleSystem
+public class ParticleSystem2D extends Canvas implements IBaseParticleSystem
 {
 
 	private GraphicsContext graphiX;
 	private LongProperty particleAmountProperty;
 	private LongProperty maxParticleProperty;
-	private ObjectProperty<Paint> backgroundPaintProperty;
 	private BooleanProperty shouldParticlesAgeProperty;
+	private ObjectProperty<Paint> backgroundPaintProperty;
 
-	private ObservableList<BaseParticle2D> particles;
+	private ObservableList<IBaseParticle> particles;
 	private ObservableList<BaseParticleEmitter> particleEmitter;
 	private ObservableList<BaseParticleModifier> modifierList;
 	private FXParticlesView parent;
@@ -65,6 +66,7 @@ public class ParticleSystem2D extends Canvas implements IParticleSystem
 	 * 
 	 * @param emitter the emitter to add
 	 */
+	@Override
 	public void addParticleEmitter(BaseParticleEmitter emitter)
 	{
 		particleEmitter.add(emitter);
@@ -77,6 +79,7 @@ public class ParticleSystem2D extends Canvas implements IParticleSystem
 	 * 
 	 * @param emitter
 	 */
+	@Override
 	public void removeParticleEmitter(BaseParticleEmitter emitter)
 	{
 		particleEmitter.remove(emitter);
@@ -88,6 +91,7 @@ public class ParticleSystem2D extends Canvas implements IParticleSystem
 	 * 
 	 * @param mod the modifier to add.
 	 */
+	@Override
 	public void addParticleModifier(BaseParticleModifier mod)
 	{
 		modifierList.add(mod);
@@ -100,7 +104,8 @@ public class ParticleSystem2D extends Canvas implements IParticleSystem
 	 * 
 	 * @param mod
 	 */
-	public void removeModifier(BaseParticleModifier mod)
+	@Override
+	public void removeParticleModifier(BaseParticleModifier mod)
 	{
 		modifierList.remove(mod);
 		parent.getChildren().remove(mod);
@@ -144,7 +149,7 @@ public class ParticleSystem2D extends Canvas implements IParticleSystem
 	 * 
 	 * @return the current particles
 	 */
-	public List<BaseParticle2D> getParticles()
+	public List<IBaseParticle> getParticles()
 	{
 		return particles;
 	}
@@ -170,7 +175,12 @@ public class ParticleSystem2D extends Canvas implements IParticleSystem
 		return particles.size() + 1;
 	}
 
-	protected void modifyParticles()
+	/**
+	 * Calls every
+	 * {@link BaseParticleModifier#modifyParticle(BaseParticle2D, IBaseParticleSystem)}
+	 * for every particle in the system.
+	 */
+	public void modifyParticles()
 	{
 		particles.stream().forEach(p ->
 			{
@@ -182,7 +192,12 @@ public class ParticleSystem2D extends Canvas implements IParticleSystem
 		modifyParticlesAll();
 	}
 
-	protected void modifyParticlesAll()
+	/**
+	 * Calls every
+	 * {@link BaseParticleModifier#modifyParticles(List, IBaseParticleSystem)} for
+	 * every particle in the system.
+	 */
+	public void modifyParticlesAll()
 	{
 		for (BaseParticleModifier modifier : modifierList)
 		{
@@ -201,7 +216,7 @@ public class ParticleSystem2D extends Canvas implements IParticleSystem
 		return modifierList;
 	}
 
-	public void createParticle(BaseParticle2D particle)
+	public void createParticle(IBaseParticle particle)
 	{
 		particles.add(particle);
 	}
@@ -232,12 +247,11 @@ public class ParticleSystem2D extends Canvas implements IParticleSystem
 		graphiX.fillRect(0, 0, getWidth(), getHeight());
 	}
 
-	
 	private boolean canEmit(BaseParticleEmitter e)
 	{
 		return getParticleAmount() + e.getAmountToEmit() <= getMaxParticles();
 	}
-	
+
 	/**
 	 * Draws the particle system. This method is called on every frame through the
 	 * {@link FXParticlesView} class.
@@ -253,7 +267,6 @@ public class ParticleSystem2D extends Canvas implements IParticleSystem
 			});
 	}
 
-	
 	/**
 	 * Updates the particle system. This method is called on every frame through the
 	 * {@link FXParticlesView} class.
@@ -273,9 +286,9 @@ public class ParticleSystem2D extends Canvas implements IParticleSystem
 		modifyParticles();
 
 		// iterator loop for increased speed!
-		for (Iterator<BaseParticle2D> iterator = particles.iterator(); iterator.hasNext();)
+		for (Iterator<IBaseParticle> iterator = particles.iterator(); iterator.hasNext();)
 		{
-			BaseParticle2D par = iterator.next();
+			BaseParticle2D par = (BaseParticle2D) iterator.next();
 			if (par.getLifeTime().isDead())
 			{
 				iterator.remove();

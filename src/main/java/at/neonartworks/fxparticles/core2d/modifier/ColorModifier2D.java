@@ -2,9 +2,10 @@ package at.neonartworks.fxparticles.core2d.modifier;
 
 import java.util.List;
 
-import at.neonartworks.fxparticles.IParticleSystem;
 import at.neonartworks.fxparticles.base.BaseParticle2D;
 import at.neonartworks.fxparticles.base.BaseParticleModifier;
+import at.neonartworks.fxparticles.base.IBaseParticle;
+import at.neonartworks.fxparticles.base.IBaseParticleSystem;
 import at.neonartworks.fxparticles.core2d.system.ParticleSystem2D;
 import at.neonartworks.fxparticles.util.ParticleUtil;
 import javafx.scene.paint.Color;
@@ -19,32 +20,31 @@ import javafx.scene.paint.Color;
  *
  */
 
-public class ColorModifier extends BaseParticleModifier
+public class ColorModifier2D extends BaseParticleModifier
 {
 
-	public ColorModifier(double x, double y, double strength)
+	public ColorModifier2D(double x, double y, double strength)
 	{
 		super(x, y, strength);
 
 	}
 
 	@Override
-	public void modifyParticles(List<BaseParticle2D> particles, IParticleSystem system)
+	public void modifyParticles(List<IBaseParticle> particles, IBaseParticleSystem system)
 	{
 
 		particles.stream().forEach(p ->
 			{
 
-				double hue = ParticleUtil.map(p.getLifeTime().getAge(), p.getLifeTime().getLifeTime(), 0, 0, 360);
-
-				p.setColor(Color.hsb(hue, 1, 1));
+				double hue = ParticleUtil.map( ((BaseParticle2D)p).getLifeTime().getAge(), ((BaseParticle2D)p).getLifeTime().getLifeTime(), 0, 0, 360);
+				((BaseParticle2D)p).setColor(Color.hsb(hue, 1, 1));
 
 			});
 
 	}
 
 	@Override
-	public void modifyParticle(BaseParticle2D particle, IParticleSystem system)
+	public void modifyParticle(IBaseParticle particle, IBaseParticleSystem system)
 	{
 
 	}

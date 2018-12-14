@@ -2,9 +2,10 @@ package at.neonartworks.fxparticles.core2d.modifier;
 
 import java.util.List;
 
-import at.neonartworks.fxparticles.IParticleSystem;
 import at.neonartworks.fxparticles.base.BaseParticle2D;
 import at.neonartworks.fxparticles.base.BaseParticleModifier;
+import at.neonartworks.fxparticles.base.IBaseParticle;
+import at.neonartworks.fxparticles.base.IBaseParticleSystem;
 import at.neonartworks.fxparticles.core2d.system.ParticleSystem2D;
 import at.neonartworks.fxparticles.math.Vec2D;
 
@@ -17,24 +18,24 @@ import at.neonartworks.fxparticles.math.Vec2D;
  * @author Florian Wagner
  *
  */
-public class GravityModifier extends BaseParticleModifier
+public class GravityModifier2D extends BaseParticleModifier
 {
 
-	public GravityModifier(double x, double y, double strength)
+	public GravityModifier2D(double x, double y, double strength)
 	{
 		super(x, y, strength);
 	}
 
 	@Override
-	public void modifyParticles(List<BaseParticle2D> particles, IParticleSystem system)
+	public void modifyParticles(List<IBaseParticle> particles, IBaseParticleSystem system)
 	{
-		for (BaseParticle2D particle : particles)
-			particle.addAcceleration(new Vec2D(0, getStrength() / 100));
+		for (IBaseParticle particle : particles)
+			((BaseParticle2D) particle).addAcceleration(new Vec2D(0, getStrength() / 100));
 
 	}
 
 	@Override
-	public void modifyParticle(BaseParticle2D particle, IParticleSystem system)
+	public void modifyParticle(IBaseParticle particle, IBaseParticleSystem system)
 	{
 
 	}

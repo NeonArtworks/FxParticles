@@ -13,21 +13,21 @@ import javafx.geometry.Bounds;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Paint;
 
-public abstract class BaseParticle2D
+public abstract class BaseParticle2D implements IBaseParticle
 {
 
 	public abstract void draw(GraphicsContext graphiX);
-
+	
+	private ParticleSystem2D particleSystem;
 	private ObjectProperty<LifeTime> lifeTimeProperty;
+	private DoubleProperty agingProperty;
+	private LongProperty idProperty;
+
 	private ObjectProperty<Vec2D> positionProperty;
 	private ObjectProperty<Vec2D> velocityProperty;
 	private ObjectProperty<Vec2D> accelerationProperty;
 	private ObjectProperty<Paint> paintProperty;
 	private DoubleProperty sizeProperty;
-	private DoubleProperty agingProperty;
-	private LongProperty idProperty;
-
-	private ParticleSystem2D particleSystem;
 
 	public BaseParticle2D()
 	{

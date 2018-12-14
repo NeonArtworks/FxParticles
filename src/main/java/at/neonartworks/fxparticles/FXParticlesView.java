@@ -1,5 +1,6 @@
 package at.neonartworks.fxparticles;
 
+import at.neonartworks.fxparticles.base.IBaseParticleSystem;
 import at.neonartworks.fxparticles.core2d.system.ParticleSystem2D;
 import at.neonartworks.fxparticles.core3d.system.ParticleSystem3D;
 import javafx.animation.Animation;
@@ -18,7 +19,7 @@ public class FXParticlesView extends AnchorPane
 	private Timeline systemLoop;
 	private RenderMode renderMode;
 	private double width, height;
-	private IParticleSystem particleSystem;
+	private IBaseParticleSystem particleSystem;
 
 	public FXParticlesView(double width, double height, double updateTime, RenderMode rendermode)
 	{
@@ -84,7 +85,7 @@ public class FXParticlesView extends AnchorPane
 	 * 
 	 * @return the current particle system.
 	 */
-	public IParticleSystem getParticleSystem()
+	public IBaseParticleSystem getParticleSystem()
 	{
 		return particleSystem;
 	}

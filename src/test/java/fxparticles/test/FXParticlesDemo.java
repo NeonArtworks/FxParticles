@@ -3,9 +3,9 @@ package fxparticles.test;
 import at.neonartworks.fxparticles.FXParticlesView;
 import at.neonartworks.fxparticles.RenderMode;
 import at.neonartworks.fxparticles.core2d.emitter.ParticleEmitter;
-import at.neonartworks.fxparticles.core2d.modifier.AttractorModifier;
-import at.neonartworks.fxparticles.core2d.modifier.ColorModifier;
-import at.neonartworks.fxparticles.core2d.modifier.DeflectorModifier;
+import at.neonartworks.fxparticles.core2d.modifier.AttractorModifier2D;
+import at.neonartworks.fxparticles.core2d.modifier.ColorModifier2D;
+import at.neonartworks.fxparticles.core2d.modifier.DeflectorModifier2D;
 import at.neonartworks.fxparticles.core2d.system.ParticleSystem2D;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -23,15 +23,15 @@ public class FXParticlesDemo extends Application
 	public void start(Stage primaryStage)
 	{
 
-		FXParticlesView parSysView = new FXParticlesView(width, height, 33.3, RenderMode._2D);
-		ParticleSystem2D parSys = (ParticleSystem2D) parSysView.getParticleSystem();
-		parSys.setParticlesAging(true);
-		parSys.addParticleEmitter(new ParticleEmitter(width / 2, height / 2, 20));
-		parSys.addParticleModifier(new ColorModifier(width / 3, height / 2, 0));
-		parSys.addParticleModifier(new AttractorModifier(width / 3, height / 2, 10));
-		parSys.addParticleModifier(new DeflectorModifier(width / 3, height / 2, 5));
-
-		parSys.setMaxParticles(30000);
+		FXParticlesView parSysView = new FXParticlesView(width, height, 33.3, RenderMode._3D);
+//		ParticleSystem2D parSys = (ParticleSystem2D) parSysView.getParticleSystem();
+//		parSys.setParticlesAging(true);
+//		parSys.addParticleEmitter(new ParticleEmitter(width / 2, height / 2, 20));
+//		parSys.addParticleModifier(new ColorModifier2D(width / 3, height / 2, 0));
+//		parSys.addParticleModifier(new AttractorModifier2D(width / 3, height / 2, 10));
+//		parSys.addParticleModifier(new DeflectorModifier2D(width / 3, height / 2, 5));
+//
+//		parSys.setMaxParticles(30000);
 
 		Scene scene = new Scene(parSysView, width, height);
 

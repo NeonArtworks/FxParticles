@@ -14,7 +14,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 
-public abstract class BaseParticleEmitter extends Rectangle implements IBaseEmitter
+public abstract class BaseParticleEmitter extends Rectangle implements IBaseParticleEmitter
 {
 	private LongProperty amountProperty;
 	private DoubleProperty sizePropery;
