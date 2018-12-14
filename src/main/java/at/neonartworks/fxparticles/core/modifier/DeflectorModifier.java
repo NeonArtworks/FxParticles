@@ -9,28 +9,27 @@ import at.neonartworks.fxparticles.util.Vec2D;
 import javafx.scene.paint.Color;
 
 /**
- * Attractor Modifier <br>
- * The attractor modifier is an example of how to implement an basic particle
+ * Deflector Modifier <br>
+ * The deflector modifier is an example of how to implement an basic particle
  * modifier using
  * {@link BaseParticleModifier}.{@link #modifyParticle(BaseParticle, ParticleSystem)}
  * 
  * @author Florian Wagner
  *
  */
-
-public class AttractorModifier extends BaseParticleModifier
+public class DeflectorModifier extends BaseParticleModifier
 {
 
-	public AttractorModifier(double x, double y, double strength)
+	public DeflectorModifier(double x, double y, double strength)
 	{
 		super(x, y, strength);
-		setColor(Color.YELLOW);
+		setColor(Color.VIOLET);
 	}
 
 	@Override
 	public void modifyParticle(BaseParticle particle, ParticleSystem system)
 	{
-		Vec2D dir = Vec2D.subtract(getPosition(), particle.getPosition());
+		Vec2D dir = Vec2D.subtract(particle.getPosition(), getPosition());
 		double dsquared = dir.getMagnitude();
 		dsquared = ParticleUtil.constrain(dsquared, 100, 400);
 		double strength = getStrength() / dsquared;
@@ -47,7 +46,7 @@ public class AttractorModifier extends BaseParticleModifier
 	@Override
 	public String toString()
 	{
-		return "AttractorModifier: x:" + getPositionX() + ", y:" + getPositionY() + ", strength:" + getStrength();
+		return "DeflectorModifier: x:" + getPositionX() + ", y:" + getPositionY() + ", strength:" + getStrength();
 	}
 
 }

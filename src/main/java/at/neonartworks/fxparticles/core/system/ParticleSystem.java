@@ -1,17 +1,21 @@
 package at.neonartworks.fxparticles.core.system;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import at.neonartworks.fxparticles.core.emitter.BaseParticleEmitter;
 import at.neonartworks.fxparticles.core.modifier.BaseParticleModifier;
 import at.neonartworks.fxparticles.core.system.particle.BaseParticle;
-import at.neonartworks.fxparticles.core.system.particle.Particle;
-import at.neonartworks.fxparticles.util.Vec2D;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.LongProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleLongProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
@@ -28,46 +32,27 @@ public class ParticleSystem extends Canvas
 {
 
 	private GraphicsContext graphiX;
-	private long particleAmount = 0;
-	private long maxParticles = 100000;
-	private Paint backgroundColor = Color.BLACK;
+	private LongProperty particleAmountProperty;
+	private LongProperty maxParticleProperty;
+	private ObjectProperty<Paint> backgroundPaintProperty;
+	private BooleanProperty shouldParticlesAgeProperty;
 
-	private List<BaseParticle> particles;
-	private List<BaseParticleEmitter> particleEmitter;
-	private List<BaseParticleModifier> modifierList;
-	private AnchorPane parent;
-	private static ParticleSystem system;
-	private boolean shouldParticlesAge = true;
+	private ObservableList<BaseParticle> particles;
+	private ObservableList<BaseParticleEmitter> particleEmitter;
+	private ObservableList<BaseParticleModifier> modifierList;
+	private ParticleSystemView parent;
 
-	/**
-	 * Returns a ParticleSystem instance.
-	 * 
-	 * @param parent the parent anchor pane.
-	 * @return ParticleSystem instance
-	 */
-	public static ParticleSystem getParticleSystem(AnchorPane parent)
+	public ParticleSystem(ParticleSystemView parent)
 	{
-		if (system == null)
-			system = new ParticleSystem(parent);
-		return system;
-	}
+		particleAmountProperty = new SimpleLongProperty(0);
+		maxParticleProperty = new SimpleLongProperty(1000);
+		backgroundPaintProperty = new SimpleObjectProperty<>(Color.BLACK);
+		shouldParticlesAgeProperty = new SimpleBooleanProperty(true);
 
-	public boolean areParticlesAging()
-	{
-		return shouldParticlesAge;
-	}
-
-	public void setParticlesAging(boolean shouldParticlesAge)
-	{
-		this.shouldParticlesAge = shouldParticlesAge;
-	}
-
-	private ParticleSystem(AnchorPane parent)
-	{
 		this.parent = parent;
-		particles = new ArrayList<>();
-		modifierList = new ArrayList<BaseParticleModifier>();
-		particleEmitter = new ArrayList<BaseParticleEmitter>();
+		particles = FXCollections.observableArrayList();
+		modifierList = FXCollections.observableArrayList();
+		particleEmitter = FXCollections.observableArrayList();
 		graphiX = getGraphicsContext2D();
 		fillBackground();
 
@@ -126,7 +111,7 @@ public class ParticleSystem extends Canvas
 	 */
 	public long getParticleAmount()
 	{
-		return particleAmount;
+		return getParticleAmountProperty().get();
 	}
 
 	/**
@@ -137,7 +122,7 @@ public class ParticleSystem extends Canvas
 	 */
 	public long getMaxParticles()
 	{
-		return maxParticles;
+		return getMaxParticleProperty().get();
 	}
 
 	/**
@@ -147,7 +132,7 @@ public class ParticleSystem extends Canvas
 	 */
 	public void setMaxParticles(long maxParticles)
 	{
-		this.maxParticles = maxParticles;
+		getMaxParticleProperty().set(maxParticles);
 	}
 
 	/**
@@ -183,11 +168,6 @@ public class ParticleSystem extends Canvas
 		return particles.size() + 1;
 	}
 
-	private void increaseParticleAmount()
-	{
-		particleAmount++;
-	}
-
 	protected void modifyParticles()
 	{
 		particles.stream().forEach(p ->
@@ -197,6 +177,15 @@ public class ParticleSystem extends Canvas
 					modifier.modifyParticle(p, this);
 				}
 			});
+		modifyParticlesAll();
+	}
+
+	protected void modifyParticlesAll()
+	{
+		for (BaseParticleModifier modifier : modifierList)
+		{
+			modifier.modifyParticles(particles, this);
+		}
 	}
 
 	/**
@@ -213,7 +202,6 @@ public class ParticleSystem extends Canvas
 	public void createParticle(BaseParticle particle)
 	{
 		particles.add(particle);
-		increaseParticleAmount();
 	}
 
 	/**
@@ -221,9 +209,9 @@ public class ParticleSystem extends Canvas
 	 * 
 	 * @return the background color
 	 */
-	public Color getBackgroundColor()
+	public Paint getBackgroundPaint()
 	{
-		return (Color) backgroundColor;
+		return getBackgroundPaintProperty().get();
 	}
 
 	/**
@@ -231,24 +219,14 @@ public class ParticleSystem extends Canvas
 	 * 
 	 * @param backgroundColor the background color
 	 */
-	public void setBackgroundColor(Color backgroundColor)
+	public void setBackgroundPaint(Color backgroundColor)
 	{
-		this.backgroundColor = backgroundColor;
-	}
-
-	/**
-	 * Can be used to set the background to something else than a static color.
-	 * 
-	 * @param paint the paint for the background.
-	 */
-	public void setBackground(Paint paint)
-	{
-		this.backgroundColor = paint;
+		getBackgroundPaintProperty().set(backgroundColor);
 	}
 
 	private void fillBackground()
 	{
-		graphiX.setFill(backgroundColor);
+		graphiX.setFill(getBackgroundPaint());
 		graphiX.fillRect(0, 0, getWidth(), getHeight());
 	}
 
@@ -289,13 +267,63 @@ public class ParticleSystem extends Canvas
 				iterator.remove();
 			} else
 			{
-				par.update(shouldParticlesAge);
+				par.update(areParticlesAging());
 			}
 		}
 
-		particleAmount = particles.size();
+		particleAmountProperty.bind(new SimpleLongProperty(particles.size()));
 		Stage st = (Stage) getScene().getWindow();
-		st.setTitle("Particles: " + particleAmount + "/" + maxParticles);
+		st.setTitle("Particles: " + getParticleAmount() + "/" + getMaxParticles());
+	}
+
+	public boolean areParticlesAging()
+	{
+		return getShouldParticlesAgeProperty().get();
+	}
+
+	public void setParticlesAging(boolean shouldParticlesAge)
+	{
+		getShouldParticlesAgeProperty().set(shouldParticlesAge);
+	}
+
+	public LongProperty getParticleAmountProperty()
+	{
+		return particleAmountProperty;
+	}
+
+	public void setParticleAmountProperty(LongProperty particleAmountProperty)
+	{
+		this.particleAmountProperty = particleAmountProperty;
+	}
+
+	public LongProperty getMaxParticleProperty()
+	{
+		return maxParticleProperty;
+	}
+
+	public void setMaxParticleProperty(LongProperty maxParticleProperty)
+	{
+		this.maxParticleProperty = maxParticleProperty;
+	}
+
+	public ObjectProperty<Paint> getBackgroundPaintProperty()
+	{
+		return backgroundPaintProperty;
+	}
+
+	public void setBackgroundPaintProperty(ObjectProperty<Paint> backgroundPaintProperty)
+	{
+		this.backgroundPaintProperty = backgroundPaintProperty;
+	}
+
+	public BooleanProperty getShouldParticlesAgeProperty()
+	{
+		return shouldParticlesAgeProperty;
+	}
+
+	public void setShouldParticlesAgeProperty(BooleanProperty shouldParticlesAgeProperty)
+	{
+		this.shouldParticlesAgeProperty = shouldParticlesAgeProperty;
 	}
 
 	/**
@@ -304,8 +332,8 @@ public class ParticleSystem extends Canvas
 	@Override
 	public String toString()
 	{
-		return "ParticleSystem [particleAmount=" + particleAmount + ", maxParticles=" + maxParticles
-				+ ", backgroundColor=" + backgroundColor + ", particles=" + particles + ", particleEmitter="
+		return "ParticleSystem [particleAmount=" + getParticleAmount() + ", maxParticles=" + getMaxParticles()
+				+ ", backgroundColor=" + getBackgroundPaint() + ", particles=" + particles + ", particleEmitter="
 				+ particleEmitter + ", modifierList=" + modifierList + "]";
 	}
 

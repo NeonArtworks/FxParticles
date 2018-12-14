@@ -1,6 +1,5 @@
 package at.neonartworks.fxparticles.core.system.particle;
 
-import at.neonartworks.fxparticles.core.system.LifeTime;
 import at.neonartworks.fxparticles.core.system.ParticleSystem;
 import at.neonartworks.fxparticles.util.Vec2D;
 import javafx.scene.canvas.GraphicsContext;
@@ -47,10 +46,8 @@ public class Particle extends BaseParticle
 	{
 		if (getLifeTime().isAlive())
 		{
-
 			graphiX.setFill(getColor());
 			graphiX.fillOval(getX(), getY(), getSize(), getSize());
-
 		}
 	}
 

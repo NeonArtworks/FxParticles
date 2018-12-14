@@ -1,30 +1,42 @@
 package at.neonartworks.fxparticles.core.emitter;
 
-import at.neonartworks.fxparticles.core.system.ParticleSystem;
 import at.neonartworks.fxparticles.util.Delta;
 import at.neonartworks.fxparticles.util.Vec2D;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.LongProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleLongProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Cursor;
+import javafx.scene.control.Tooltip;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 
-public class BaseParticleEmitter extends Rectangle implements IBaseEmitter
+public abstract class BaseParticleEmitter extends Rectangle implements IBaseEmitter
 {
-
-	private Vec2D position;
-	private long amountToEmit = 100;
-	private double size = 10;
-	private Color color = Color.GREEN;
+	private ObjectProperty<Vec2D> positionProperty;
+	private LongProperty amountProperty;
+	private DoubleProperty sizePropery;
+	private ObjectProperty<Paint> paintProperty;
 
 	public BaseParticleEmitter(double x, double y, long pAmount)
 	{
+		positionProperty = new SimpleObjectProperty<>();
+		amountProperty = new SimpleLongProperty(10);
+		sizePropery = new SimpleDoubleProperty(10);
+		paintProperty = new SimpleObjectProperty<>(Color.GREEN);
+
 		setPosition(new Vec2D(x, y));
 		setAmountToEmit(pAmount);
 		prepareHandler();
 		setX(x);
 		setY(y);
-		setFill(color);
+		setFill(paintProperty.get());
 		setWidth(getSize());
 		setHeight(getSize());
+		Tooltip.install(this, new Tooltip(this.toString()));
 	}
 
 	private void prepareHandler()
@@ -70,83 +82,117 @@ public class BaseParticleEmitter extends Rectangle implements IBaseEmitter
 			});
 	}
 
-	public Color getColor()
+	public Paint getColor()
 	{
-		return color;
+		return paintProperty.get();
 	}
 
 	public void setColor(Color color)
 	{
-		this.color = color;
+		paintProperty.set(color);
 		setFill(color);
 	}
 
 	public double getSize()
 	{
-		return size;
+		return sizePropery.get();
 	}
 
 	public void setSize(double size)
 	{
-		this.size = size;
+		sizePropery.set(size);
 		setWidth(getSize());
 		setHeight(getSize());
 	}
 
 	public long getAmountToEmit()
 	{
-		return amountToEmit;
+		return amountProperty.get();
 	}
 
 	public void setAmountToEmit(long amountToEmit)
 	{
-		this.amountToEmit = amountToEmit;
+		amountProperty.set(amountToEmit);
 	}
 
 	public Vec2D getPosition()
 	{
-		return position;
+		return positionProperty.get();
 	}
 
 	public void setPosition(Vec2D pos)
 	{
-		this.position = pos;
+		positionProperty.set(pos);
 
 	}
 
 	public void setPositionX(double x)
 	{
-		this.position.setX(x);
+		getPosition().setX(x);
 
 	}
 
 	public void setPositionY(double y)
 	{
-		this.position.setY(y);
+		getPosition().setY(y);
 
 	}
 
 	public double getPositionX()
 	{
-		return this.position.getX();
+		return getPosition().getX();
 	}
 
 	public double getPositionY()
 	{
-		return this.position.getY();
+		return getPosition().getY();
 	}
 
-	@Override
-	public void emit(ParticleSystem particleSystem)
+	public ObjectProperty<Vec2D> getPositionProperty()
 	{
+		return positionProperty;
+	}
 
+	public void setPositionProperty(ObjectProperty<Vec2D> positionProperty)
+	{
+		this.positionProperty = positionProperty;
+	}
+
+	public LongProperty getAmountProperty()
+	{
+		return amountProperty;
+	}
+
+	public void setAmountProperty(LongProperty amountProperty)
+	{
+		this.amountProperty = amountProperty;
+	}
+
+	public DoubleProperty getSizePropery()
+	{
+		return sizePropery;
+	}
+
+	public void setSizePropery(DoubleProperty sizePropery)
+	{
+		this.sizePropery = sizePropery;
+	}
+
+	public ObjectProperty<Paint> getPaintProperty()
+	{
+		return paintProperty;
+	}
+
+	public void setPaintProperty(ObjectProperty<Paint> paintProperty)
+	{
+		this.paintProperty = paintProperty;
 	}
 
 	@Override
 	public String toString()
 	{
-		return "BaseParticleEmitter: position:" + position + ", amountToEmit:" + amountToEmit + ", size:" + size
-				+ ", color:" + color;
+		return "BaseParticleEmitter: position:" + getPosition() + ", amountToEmit:" + getAmountToEmit() + ", size:" + getSize()
+				+ ", color:" + getColor();
 	}
 
 }

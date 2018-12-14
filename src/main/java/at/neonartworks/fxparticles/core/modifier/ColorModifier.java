@@ -4,30 +4,40 @@ import java.util.List;
 
 import at.neonartworks.fxparticles.core.system.ParticleSystem;
 import at.neonartworks.fxparticles.core.system.particle.BaseParticle;
-import at.neonartworks.fxparticles.util.Vec2D;
+import at.neonartworks.fxparticles.util.ParticleUtil;
+import javafx.scene.paint.Color;
 
 /**
- * Gravity Modifier<br>
- * The gravity modifier is an example of how to use the
+ * Color Modifier<br>
+ * The color modifier is an example of how to use the
  * {@link BaseParticleModifier}.{@link #modifyParticles(List, ParticleSystem)}
  * method.
  * 
  * @author Florian Wagner
  *
  */
-public class GravityModifier extends BaseParticleModifier
+
+public class ColorModifier extends BaseParticleModifier
 {
 
-	public GravityModifier(double x, double y, double strength)
+	public ColorModifier(double x, double y, double strength)
 	{
 		super(x, y, strength);
+
 	}
 
 	@Override
 	public void modifyParticles(List<BaseParticle> particles, ParticleSystem system)
 	{
-		for (BaseParticle particle : particles)
-			particle.addAcceleration(new Vec2D(0, getStrength() / 100));
+
+		particles.stream().forEach(p ->
+			{
+
+				double hue = ParticleUtil.map(p.getLifeTime().getAge(), p.getLifeTime().getLifeTime(), 0, 0, 360);
+
+				p.setColor(Color.hsb(hue, 1, 1));
+
+			});
 
 	}
 
@@ -40,6 +50,7 @@ public class GravityModifier extends BaseParticleModifier
 	@Override
 	public String toString()
 	{
-		return "GravityModifier [x=" + getX() + ", y=" + getY() + "]";
+		return "ColorModifier [x=" + getX() + ", y=" + getY() + "]";
 	}
+
 }

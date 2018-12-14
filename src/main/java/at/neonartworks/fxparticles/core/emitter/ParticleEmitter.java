@@ -1,7 +1,7 @@
 package at.neonartworks.fxparticles.core.emitter;
 
-import at.neonartworks.fxparticles.core.system.LifeTime;
 import at.neonartworks.fxparticles.core.system.ParticleSystem;
+import at.neonartworks.fxparticles.core.system.particle.LifeTime;
 import at.neonartworks.fxparticles.core.system.particle.Particle;
 
 public class ParticleEmitter extends BaseParticleEmitter
@@ -18,9 +18,8 @@ public class ParticleEmitter extends BaseParticleEmitter
 
 		for (int i = 0; i < getAmountToEmit(); i++)
 		{
-
-			particleSystem
-					.createParticle(new Particle(getPositionX(), getPositionY(), LifeTime.getRandom(), particleSystem));
+			
+			particleSystem.createParticle(new Particle(getPositionX(), getPositionY(), LifeTime.getRandom(), particleSystem));
 		}
 
 	}

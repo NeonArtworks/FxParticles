@@ -1,29 +1,29 @@
-package at.neonartworks.fxparticles.core.system;
+package at.neonartworks.fxparticles.core.system.particle;
 
 public class LifeTime
 {
 
-	private long lifeTime = 0;
-	private long age = 0;
+	private double lifeTime = 0;
+	private double age = 0;
 
-	public LifeTime(long lifeTIme)
+	public LifeTime(double lifeTIme)
 	{
 		this.lifeTime = lifeTIme;
 	}
 
-	public long getAge()
+	public double getAge()
 	{
 		return age;
 	}
 
-	public void setAge(long life)
+	public void setAge(double life)
 	{
 		this.age = life;
 	}
 
 	public static LifeTime getRandom()
 	{
-		return new LifeTime((long) (Math.random()*10));
+		return new LifeTime((double) (Math.random() * 10));
 	}
 
 	public void incrementAge(double inc)
@@ -31,19 +31,19 @@ public class LifeTime
 		this.age += inc;
 	}
 
-	public long getLifeTime()
+	public double getLifeTime()
 	{
 		return lifeTime;
 	}
 
-	public void setLifeTime(long lifeTime)
+	public void setLifeTime(double lifeTime)
 	{
 		this.lifeTime = lifeTime;
 	}
 
 	public boolean isDead()
 	{
-		if (age >= lifeTime)
+		if (age > lifeTime)
 		{
 			return true;
 		}
@@ -52,7 +52,7 @@ public class LifeTime
 
 	public boolean isAlive()
 	{
-		if (age < lifeTime)
+		if (age <= lifeTime)
 			return true;
 		return false;
 	}

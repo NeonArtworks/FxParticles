@@ -5,6 +5,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Duration;
 
@@ -13,17 +14,28 @@ public class ParticleSystemView extends AnchorPane
 
 	private Timeline systemLoop;
 	private final ParticleSystem particleSystem;
-
+	
 	public ParticleSystemView(double width, double height, double updateTime)
 	{
-		this.particleSystem = ParticleSystem.getParticleSystem(this);
+		this.particleSystem = new ParticleSystem(this);
 		this.particleSystem.setWidth(width);
 		this.particleSystem.setHeight(height);
 		this.getChildren().add(particleSystem);
-		
+
 		particleSystem.widthProperty().bind(widthProperty());
 		particleSystem.heightProperty().bind(heightProperty());
 		startSystemLoop(updateTime);
+		
+	}
+	
+	public Timeline getSystemLoop()
+	{
+		return systemLoop;
+	}
+
+	public void setSystemLoop(Timeline systemLoop)
+	{
+		this.systemLoop = systemLoop;
 	}
 
 	public ParticleSystem getParticleSystem()
@@ -41,6 +53,7 @@ public class ParticleSystemView extends AnchorPane
 		systemLoop = new Timeline(new KeyFrame(Duration.millis(updateTime), gameUpdate));
 		systemLoop.setCycleCount(Animation.INDEFINITE);
 		systemLoop.play();
+
 	}
 
 	public void stopSystemLoop()
