@@ -1,10 +1,12 @@
 package fxparticles.test;
 
-import at.neonartworks.fxparticles.core.emitter.ParticleEmitter;
-import at.neonartworks.fxparticles.core.modifier.AttractorModifier;
-import at.neonartworks.fxparticles.core.modifier.DeflectorModifier;
-import at.neonartworks.fxparticles.core.system.ParticleSystem;
-import at.neonartworks.fxparticles.core.system.ParticleSystemView;
+import at.neonartworks.fxparticles.FXParticlesView;
+import at.neonartworks.fxparticles.RenderMode;
+import at.neonartworks.fxparticles.core2d.emitter.ParticleEmitter;
+import at.neonartworks.fxparticles.core2d.modifier.AttractorModifier;
+import at.neonartworks.fxparticles.core2d.modifier.ColorModifier;
+import at.neonartworks.fxparticles.core2d.modifier.DeflectorModifier;
+import at.neonartworks.fxparticles.core2d.system.ParticleSystem2D;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
@@ -21,12 +23,11 @@ public class FXParticlesDemo extends Application
 	public void start(Stage primaryStage)
 	{
 
-		ParticleSystemView parSysView = new ParticleSystemView(width, height, 33.3);
-		ParticleSystem parSys = parSysView.getParticleSystem();
+		FXParticlesView parSysView = new FXParticlesView(width, height, 33.3, RenderMode._2D);
+		ParticleSystem2D parSys = (ParticleSystem2D) parSysView.getParticleSystem();
 		parSys.setParticlesAging(true);
-		
 		parSys.addParticleEmitter(new ParticleEmitter(width / 2, height / 2, 20));
-		//parSys.addParticleModifier(new ColorModifier(width / 3, height / 2, 0));
+		parSys.addParticleModifier(new ColorModifier(width / 3, height / 2, 0));
 		parSys.addParticleModifier(new AttractorModifier(width / 3, height / 2, 10));
 		parSys.addParticleModifier(new DeflectorModifier(width / 3, height / 2, 5));
 
