@@ -2,7 +2,7 @@ package fxparticles.test;
 
 import at.neonartworks.fxparticles.FXParticlesView;
 import at.neonartworks.fxparticles.RenderMode;
-import at.neonartworks.fxparticles.core2d.emitter.ParticleEmitter;
+import at.neonartworks.fxparticles.core2d.emitter.ParticleEmitter2D;
 import at.neonartworks.fxparticles.core2d.modifier.AttractorModifier2D;
 import at.neonartworks.fxparticles.core2d.modifier.ColorModifier2D;
 import at.neonartworks.fxparticles.core2d.modifier.DeflectorModifier2D;

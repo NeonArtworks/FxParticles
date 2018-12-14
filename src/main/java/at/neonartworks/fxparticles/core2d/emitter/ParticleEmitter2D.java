@@ -6,10 +6,10 @@ import at.neonartworks.fxparticles.core2d.system.ParticleSystem2D;
 import at.neonartworks.fxparticles.core2d.system.particle.LifeTime;
 import at.neonartworks.fxparticles.core2d.system.particle.Particle2D;
 
-public class ParticleEmitter extends BaseParticleEmitter
+public class ParticleEmitter2D extends BaseParticleEmitter
 {
 
-	public ParticleEmitter(double x, double y, long pAmount)
+	public ParticleEmitter2D(double x, double y, long pAmount)
 	{
 		super(x, y, pAmount);
 	}
