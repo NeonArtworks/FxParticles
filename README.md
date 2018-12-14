@@ -21,7 +21,7 @@ public class FXParticlesDemo extends Application
 		parSys.setParticlesAging(true); //default is true
     
 		//adding one emitter and different kinds of modifiers to the system
-		parSys.addParticleEmitter(new ParticleEmitter(width / 2, height / 2, 20));
+		parSys.addParticleEmitter(new ParticleEmitter2D(width / 2, height / 2, 20));
 		parSys.addParticleModifier(new ColorModifier2D(width / 3, height / 2, 0));
 		parSys.addParticleModifier(new AttractorModifier2D(width / 3, height / 2, 10));
 		parSys.addParticleModifier(new DeflectorModifier2D(width / 3, height / 2, 5));
