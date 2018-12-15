@@ -31,7 +31,6 @@ public abstract class BaseParticleEmitter extends Rectangle implements IBasePart
 		prepareHandler();
 		setLayoutX(x);
 		setLayoutY(y);
-
 		setFill(paintProperty.get());
 		setWidth(getSize());
 		setHeight(getSize());
@@ -138,7 +137,7 @@ public abstract class BaseParticleEmitter extends Rectangle implements IBasePart
 		setLayoutY(y);
 
 	}
-
+	
 	public double getPositionX()
 	{
 		return getPosition2D().getX();

@@ -6,6 +6,7 @@ import at.neonartworks.fxparticles.core3d.system.ParticleSystem3D;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.beans.property.Property;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
@@ -65,6 +66,12 @@ public class FXParticlesView extends AnchorPane
 	private void create3DParticleSystem()
 	{
 		this.particleSystem = new ParticleSystem3D();
+		setTopAnchor((Node) this.particleSystem, 0d);
+		setBottomAnchor((Node) this.particleSystem, 0d);
+		setLeftAnchor((Node) this.particleSystem, 0d);
+		setRightAnchor((Node) this.particleSystem, 0d);
+		getChildren().add((Node) this.particleSystem);
+
 	}
 
 	/**
